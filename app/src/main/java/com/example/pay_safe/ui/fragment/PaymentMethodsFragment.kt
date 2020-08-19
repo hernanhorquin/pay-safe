@@ -5,12 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.pay_safe.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pay_safe.ui.activity.MainActivity
 import com.example.pay_safe.R
-import kotlinx.android.synthetic.main.fragment_payment_methods.button_continue
+import com.example.pay_safe.data.model.PaymentMethod
+import com.example.pay_safe.ui.adapter.PaymentMethodsAdapter
+import com.example.pay_safe.ui.utils.Data
+import com.example.pay_safe.ui.utils.Status
+import com.example.pay_safe.ui.viewmodel.PaySafeViewModel
+import kotlinx.android.synthetic.main.fragment_payment_methods.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PaymentMethodsFragment : Fragment() {
+
+    private val viewModel by viewModel<PaySafeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,18 +38,44 @@ class PaymentMethodsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getPaymentMethods()
+        setUpObservers()
+    }
+
+    private fun setUpObservers() {
         button_continue.setOnClickListener {
             (activity as (MainActivity)).moveNext()
+        }
+        viewModel.paymentMethods.observe(::getLifecycle, ::updateUI)
+    }
+
+    private fun updateUI(characterData: Data<List<PaymentMethod>>) {
+        when (characterData.responseType) {
+            Status.ERROR -> {
+                //hideProgress()
+                //characterData.error?.message?.let { showMessage(it) }
+                //textViewDetails.text = getString(R.string.no_character)
+            }
+            Status.LOADING -> {
+                //showProgress()
+            }
+            Status.SUCCESSFUL -> {
+                //hideProgress()
+                payment_methods_recycler.layoutManager = LinearLayoutManager(context)
+                characterData.data?.let {
+                    payment_methods_recycler.adapter = PaymentMethodsAdapter(it)
+                }
+            }
         }
     }
 
     companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PaymentMethodsFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
+//
+//        @JvmStatic
+//        fun newInstance() =
+//            PaymentMethodsFragment().apply {
+//                arguments = Bundle().apply {
+//                }
+//            }
     }
 }

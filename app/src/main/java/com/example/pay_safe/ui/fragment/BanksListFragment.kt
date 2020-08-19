@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.pay_safe.MainActivity
+import com.example.pay_safe.ui.activity.MainActivity
 import com.example.pay_safe.R
 import kotlinx.android.synthetic.main.fragment_banks_list.button_continue
 
@@ -34,11 +34,11 @@ class BanksListFragment : Fragment() {
 
     companion object {
 
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BanksListFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
+//        @JvmStatic
+//        fun newInstance() =
+//            BanksListFragment().apply {
+//                arguments = Bundle().apply {
+//                }
+//            }
     }
 }

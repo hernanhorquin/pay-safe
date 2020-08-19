@@ -30,11 +30,11 @@ class SuccessFragment : Fragment() {
 
     companion object {
 
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SuccessFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
+//        @JvmStatic
+//        fun newInstance() =
+//            SuccessFragment().apply {
+//                arguments = Bundle().apply {
+//                }
+//            }
     }
 }
