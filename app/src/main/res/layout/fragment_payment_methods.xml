@@ -13,10 +13,21 @@
         android:layout_marginTop="15dp"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:text="Metodos de Pago"
+        android:text="@string/payment_method_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/payment_methods_title"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/payment_methods_recycler"
@@ -32,7 +43,7 @@
         android:layout_height="50dp"
         android:layout_width="200dp"
         android:layout_marginBottom="50dp"
-        android:text="Continuar"
+        android:text="@string/continue_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

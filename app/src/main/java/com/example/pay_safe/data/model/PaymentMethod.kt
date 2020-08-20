@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PaymentMethod(
     @SerializedName("id")
-    val id: String,
+    var id: String,
     @SerializedName("name")
     val name: String,
     @SerializedName("thumbnail")

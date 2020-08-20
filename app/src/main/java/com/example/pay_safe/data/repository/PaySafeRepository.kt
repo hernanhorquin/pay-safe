@@ -15,7 +15,7 @@ class PaySafeRepository {
     private val apiService = MercadoPagoRequestGenerator()
 
     fun getPaymentMethods(): Result<List<PaymentMethod>> {
-        val callResponse = apiService.createService(ApiService::class.java).getPaymentMethods("APP_USR-1582084191387504-081900-424fa17daefc2364232bd282b48df0d7-315503841")
+        val callResponse = apiService.createService(ApiService::class.java).getPaymentMethods("APP_USR-1582084191387504-082017-3a52438546b91f9275cea41893919813-315503841")
         val response = callResponse.execute()
         if (response != null) {
             if (response.isSuccessful)

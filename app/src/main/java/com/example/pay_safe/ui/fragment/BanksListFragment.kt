@@ -11,17 +11,10 @@ import kotlinx.android.synthetic.main.fragment_banks_list.button_continue
 
 class BanksListFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_banks_list, container, false)
     }
 
@@ -33,8 +26,6 @@ class BanksListFragment : Fragment() {
     }
 
     companion object {
-
-//        @JvmStatic
 //        fun newInstance() =
 //            BanksListFragment().apply {
 //                arguments = Bundle().apply {

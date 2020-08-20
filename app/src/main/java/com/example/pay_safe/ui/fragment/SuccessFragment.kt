@@ -9,17 +9,11 @@ import com.example.pay_safe.R
 
 class SuccessFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_success, container, false)
     }
 
@@ -29,8 +23,6 @@ class SuccessFragment : Fragment() {
     }
 
     companion object {
-
-//        @JvmStatic
 //        fun newInstance() =
 //            SuccessFragment().apply {
 //                arguments = Bundle().apply {

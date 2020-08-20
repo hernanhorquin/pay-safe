@@ -7,27 +7,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.pay_safe.ui.activity.MainActivity
 import com.example.pay_safe.R
 import com.example.pay_safe.ui.utils.closeSoftKeyBoard
-import kotlinx.android.synthetic.main.fragment_amount.*
+import kotlinx.android.synthetic.main.fragment_amount.button_continue
+import kotlinx.android.synthetic.main.fragment_amount.edit_text_amount
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 
 class AmountFragment : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_amount, container, false)
     }
 
@@ -38,8 +32,12 @@ class AmountFragment : Fragment() {
             NumberFormat.getCurrencyInstance(Locale.US).also { it.maximumFractionDigits = 0 }
 
         button_continue.setOnClickListener {
-            closeSoftKeyBoard()
-            (activity as (MainActivity)).moveNext()
+            if (edit_text_amount.text.isNotEmpty()) {
+                closeSoftKeyBoard()
+                (activity as (MainActivity)).moveNext()
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.amount_error_msg), Toast.LENGTH_SHORT).show()
+            }
         }
 
         val moneyWatcher = object : TextWatcher {
@@ -53,12 +51,10 @@ class AmountFragment : Fragment() {
                 if (cleanString.isNotEmpty()) {
                     edit_text_amount.removeTextChangedListener(this)
                     val parsed = cleanString.toInt()
-                    //viewModel.amount = parsed
                     val formatted: String = formatInstance.format(parsed).replace(",", ".")
                     edit_text_amount.setText(formatted)
                     edit_text_amount.setSelection(formatted.length)
                     edit_text_amount.addTextChangedListener(this)
-                    //viewModel.checkLimits()
 
                 } else if (p0?.isNotEmpty() == true) {
                     edit_text_amount.removeTextChangedListener(this)
@@ -71,7 +67,6 @@ class AmountFragment : Fragment() {
     }
 
     companion object {
-//        @JvmStatic
 //        fun newInstance() =
 //            AmountFragment().apply {
 //                arguments = Bundle().apply {
