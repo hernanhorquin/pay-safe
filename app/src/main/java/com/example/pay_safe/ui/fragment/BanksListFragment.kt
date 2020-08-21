@@ -10,6 +10,7 @@ import com.example.pay_safe.R
 import com.example.pay_safe.data.model.PaymentMethod
 import com.example.pay_safe.ui.adapter.PaymentMethodsAdapter
 import com.example.pay_safe.ui.utils.Data
+import com.example.pay_safe.ui.utils.Event
 import com.example.pay_safe.ui.utils.Status
 import com.example.pay_safe.ui.viewmodel.PaySafeViewModel
 import kotlinx.android.synthetic.main.fragment_banks_list.banks_recycler
@@ -44,25 +45,28 @@ class BanksListFragment : Fragment() {
         }
     }
 
-    private fun updateUI(banksList: Data<List<PaymentMethod>>) {
-        when (banksList.responseType) {
-            Status.ERROR -> {
-                hideLoading()
-            }
-            Status.LOADING -> {
-                showLoading()
-            }
-            Status.SUCCESSFUL -> {
-                hideLoading()
-                banks_recycler.layoutManager = LinearLayoutManager(context)
-                banksList.data?.let {
-                    adapter = PaymentMethodsAdapter(it) { bankId ->
-                        viewModel.bankId = bankId
+    private fun updateUI(banksListEvent: Event<Data<List<PaymentMethod>>>) {
+        banksListEvent.getContentIfNotHandled()?.let {
+            when (it.responseType) {
+                Status.ERROR -> {
+                    hideLoading()
+                }
+                Status.LOADING -> {
+                    showLoading()
+                }
+                Status.SUCCESSFUL -> {
+                    hideLoading()
+                    banks_recycler.layoutManager = LinearLayoutManager(context)
+                    it.data?.let { bankList ->
+                        adapter = PaymentMethodsAdapter(bankList) { bankId ->
+                            viewModel.bankId = bankId
+                        }
+                        banks_recycler.adapter = adapter
                     }
-                    banks_recycler.adapter = adapter
                 }
             }
         }
+
     }
 
     private fun hideLoading() {
@@ -71,13 +75,5 @@ class BanksListFragment : Fragment() {
 
     private fun showLoading() {
         progressBar.visibility = View.VISIBLE
-    }
-
-    companion object {
-//        fun newInstance() =
-//            BanksListFragment().apply {
-//                arguments = Bundle().apply {
-//                }
-//            }
     }
 }

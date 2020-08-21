@@ -22,11 +22,4 @@ class SuccessFragment : Fragment() {
 
     }
 
-    companion object {
-//        fun newInstance() =
-//            SuccessFragment().apply {
-//                arguments = Bundle().apply {
-//                }
-//            }
-    }
 }

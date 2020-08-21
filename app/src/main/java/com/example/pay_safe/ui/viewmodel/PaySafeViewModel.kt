@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pay_safe.data.model.Installment
 import com.example.pay_safe.data.model.PaymentMethod
 import com.example.pay_safe.data.repository.PaySafeRepository
 import com.example.pay_safe.ui.utils.Data
@@ -15,19 +16,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PaySafeViewModel(private val repository: PaySafeRepository): ViewModel() {
+class PaySafeViewModel(private val repository: PaySafeRepository) : ViewModel() {
 
     var amount: Int = 0
     var paymentMethodId: String = EMPTY_STRING
     var bankId: String = EMPTY_STRING
+    var installmentSelected: String = EMPTY_STRING
 
-    private var _paymentMethods = MutableLiveData<Data<List<PaymentMethod>>>()
-    val paymentMethods: LiveData<Data<List<PaymentMethod>>>
+    private var _paymentMethods = MutableLiveData<Event<Data<List<PaymentMethod>>>>()
+    val paymentMethods: LiveData<Event<Data<List<PaymentMethod>>>>
         get() = _paymentMethods
 
-    private var _banksList = MutableLiveData<Data<List<PaymentMethod>>>()
-    val banksList: LiveData<Data<List<PaymentMethod>>>
+    private var _banksList = MutableLiveData<Event<Data<List<PaymentMethod>>>>()
+    val banksList: LiveData<Event<Data<List<PaymentMethod>>>>
         get() = _banksList
+
+    private var _installmentList = MutableLiveData<Event<Data<List<Installment>>>>()
+    val installmentList: LiveData<Event<Data<List<Installment>>>>
+        get() = _installmentList
 
     private val _moveTo = MutableLiveData<Event<Int>>()
     val moveTo: LiveData<Event<Int>>
@@ -68,23 +74,37 @@ class PaySafeViewModel(private val repository: PaySafeRepository): ViewModel() {
     fun getPaymentMethods() = viewModelScope.launch {
         when (val result = withContext(Dispatchers.IO) { repository.getPaymentMethods() }) {
             is Result.Failure -> {
-                _paymentMethods.postValue(Data(responseType = Status.ERROR, error = result.exception))
+                _paymentMethods.postValue(Event(Data(responseType = Status.ERROR, error = result.exception)))
             }
             is Result.Success -> {
-                _paymentMethods.postValue(Data(responseType = Status.SUCCESSFUL, data = result.data))
-            }
+                _paymentMethods.postValue(Event(Data(responseType = Status.SUCCESSFUL, data = result.data)))           }
         }
     }
 
     fun getBanksList() = viewModelScope.launch {
         when (val result = withContext(Dispatchers.IO) { repository.getBanksList(paymentMethodId) }) {
             is Result.Failure -> {
-                _banksList.postValue(Data(responseType = Status.ERROR, error = result.exception))
+                _banksList.postValue(Event(Data(responseType = Status.ERROR, error = result.exception)))
             }
             is Result.Success -> {
-                _banksList.postValue(Data(responseType = Status.SUCCESSFUL, data = result.data))
+                _banksList.postValue(Event(Data(responseType = Status.SUCCESSFUL, data = result.data)))
             }
         }
+    }
+
+    fun getInstallmentList() = viewModelScope.launch {
+        when (val result = withContext(Dispatchers.IO) { repository.getInstallmentList(amount, paymentMethodId, bankId) }) {
+            is Result.Failure -> {
+                _installmentList.postValue(Event(Data(responseType = Status.ERROR, error = result.exception)))
+            }
+            is Result.Success -> {
+                _installmentList.postValue(Event(Data(responseType = Status.SUCCESSFUL, data = result.data)))
+            }
+        }
+    }
+
+    fun backTo() {
+        moveTo(_step.value?.minus(1) ?: 0)
     }
 
     companion object Steps {

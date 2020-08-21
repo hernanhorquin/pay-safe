@@ -8,4 +8,5 @@
     <color name="amount_text_color">#1c2e51</color>
     <color name="card_selected_color">#FDE38B</color>
     <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

@@ -8,11 +8,9 @@
 
     <TextView
         android:id="@+id/amount_title"
+        style="@style/text_title_appearance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
         android:text="@string/amount_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

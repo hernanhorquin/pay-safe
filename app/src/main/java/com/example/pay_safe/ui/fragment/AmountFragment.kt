@@ -37,7 +37,7 @@ class AmountFragment : Fragment() {
         button_continue.setOnClickListener {
             if (edit_text_amount.text.isNotEmpty()) {
                 closeSoftKeyBoard()
-                viewModel.amount = edit_text_amount.text.toString().replace("$", "").toInt()
+                viewModel.amount = edit_text_amount.text.toString().replace("[$.]".toRegex(), "").toInt()
                 viewModel.nextStep()
             } else {
                 Toast.makeText(requireContext(), getString(R.string.amount_error_msg), Toast.LENGTH_SHORT).show()
@@ -68,13 +68,5 @@ class AmountFragment : Fragment() {
             }
         }
         edit_text_amount.addTextChangedListener(moneyWatcher)
-    }
-
-    companion object {
-//        fun newInstance() =
-//            AmountFragment().apply {
-//                arguments = Bundle().apply {
-//                }
-//            }
     }
 }
