@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pay_safe.R
 import com.example.pay_safe.data.model.PaymentMethod
 import com.example.pay_safe.ui.adapter.PaymentMethodsAdapter
@@ -42,7 +43,17 @@ class BanksListFragment : Fragment() {
         viewModel.banksList.observe(::getLifecycle, ::updateUI)
 
         button_continue.setOnClickListener {
-            viewModel.nextStep()
+            adapter?.let {
+                if (it.selected != RecyclerView.NO_POSITION) {
+                    viewModel.nextStep()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.select_installment_error_msg),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
