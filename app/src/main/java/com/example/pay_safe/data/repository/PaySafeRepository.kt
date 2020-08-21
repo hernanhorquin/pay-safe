@@ -4,6 +4,8 @@ import com.example.pay_safe.data.MercadoPagoRequestGenerator
 import com.example.pay_safe.data.api.ApiService
 import com.example.pay_safe.data.model.Installment
 import com.example.pay_safe.data.model.PaymentMethod
+import com.example.pay_safe.ui.utils.ACCESS_TOKEN
+import com.example.pay_safe.ui.utils.BAD_REQUEST
 import com.example.pay_safe.ui.utils.Result
 import java.lang.Exception
 
@@ -13,26 +15,26 @@ class PaySafeRepository {
 
     fun getPaymentMethods(): Result<List<PaymentMethod>> {
         val callResponse = apiService.createService(ApiService::class.java)
-            .getPaymentMethods("APP_USR-1582084191387504-082017-3a52438546b91f9275cea41893919813-315503841")
+            .getPaymentMethods(ACCESS_TOKEN)
         val response = callResponse.execute()
         response?.let {
             if (response.isSuccessful)
                 response.body()?.let { return Result.Success(it) }
         }
-        return Result.Failure(Exception("bad request"))
+        return Result.Failure(Exception(BAD_REQUEST))
     }
 
     fun getBanksList(paymentMethodId: String): Result<List<PaymentMethod>> {
-        val callResponse = apiService.createService(ApiService::class.java).getBanks(
-            "APP_USR-1582084191387504-082017-3a52438546b91f9275cea41893919813-315503841",
-            paymentMethodId
-        )
+        val callResponse = apiService
+            .createService(ApiService::class.java)
+            .getBanks(ACCESS_TOKEN, paymentMethodId)
+
         val response = callResponse.execute()
         response?.let {
             if (response.isSuccessful)
                 response.body()?.let { return Result.Success(it) }
         }
-        return Result.Failure(Exception("bad request"))
+        return Result.Failure(Exception(BAD_REQUEST))
     }
 
     fun getInstallmentList(
@@ -40,12 +42,10 @@ class PaySafeRepository {
         paymentMethodId: String,
         bankId: String
     ): Result<List<Installment>> {
-        val callResponse = apiService.createService(ApiService::class.java).getInstallments(
-            "APP_USR-1582084191387504-082017-3a52438546b91f9275cea41893919813-315503841",
-            amount,
-            paymentMethodId,
-            bankId
-        )
+        val callResponse = apiService
+            .createService(ApiService::class.java)
+            .getInstallments(ACCESS_TOKEN, amount, paymentMethodId, bankId)
+
         val response = callResponse.execute()
         response?.let {
             if (response.isSuccessful) {
@@ -56,6 +56,6 @@ class PaySafeRepository {
                 }
             }
         }
-        return Result.Failure(Exception("bad_request"))
+        return Result.Failure(Exception(BAD_REQUEST))
     }
 }

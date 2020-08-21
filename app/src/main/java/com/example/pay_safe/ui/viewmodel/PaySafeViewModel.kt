@@ -20,7 +20,9 @@ class PaySafeViewModel(private val repository: PaySafeRepository) : ViewModel() 
 
     var amount: Int = 0
     var paymentMethodId: String = EMPTY_STRING
+    var paymentMethodName: String = EMPTY_STRING
     var bankId: String = EMPTY_STRING
+    var bankName: String = EMPTY_STRING
     var installmentSelected: String = EMPTY_STRING
 
     private var _paymentMethods = MutableLiveData<Event<Data<List<PaymentMethod>>>>()
@@ -66,10 +68,24 @@ class PaySafeViewModel(private val repository: PaySafeRepository) : ViewModel() 
             INSTALLMENTS -> moveTo(
                 SUCCESS
             )
+            SUCCESS -> {
+                clearViewModel()
+                moveTo(
+                    AMOUNT
+                )
+            }
 
         }
     }
 
+    private fun clearViewModel() {
+        amount = 0
+        paymentMethodId = EMPTY_STRING
+        paymentMethodName = EMPTY_STRING
+        bankId = EMPTY_STRING
+        bankName = EMPTY_STRING
+        installmentSelected = EMPTY_STRING
+    }
 
     fun getPaymentMethods() = viewModelScope.launch {
         when (val result = withContext(Dispatchers.IO) { repository.getPaymentMethods() }) {

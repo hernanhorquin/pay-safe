@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                         replaceFragment(InstallmentsListFragment())
                     }
                     PaySafeViewModel.SUCCESS -> {
+                        supportActionBar?.hide()
                         replaceFragment(SuccessFragment())
                     }
                 }

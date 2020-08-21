@@ -47,7 +47,7 @@ class InstallmentsAdapter(val installmentsList: List<Installment>, val getId: (S
                         notifyItemChanged(before)
                     }
                 }
-                //getId(item.id)
+                getId(item.message)
             }
         }
     }

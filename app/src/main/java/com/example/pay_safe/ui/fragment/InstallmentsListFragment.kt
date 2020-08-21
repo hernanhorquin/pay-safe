@@ -67,11 +67,15 @@ class InstallmentsListFragment : Fragment() {
                 Status.SUCCESSFUL -> {
                     installments_recycler.layoutManager = LinearLayoutManager(context)
                     it.data?.let { installmentList ->
-                        adapter = InstallmentsAdapter(installmentList) { installment ->
-                            viewModel.installmentSelected = installment
+                        if (installmentList.isNotEmpty()) {
+                            adapter = InstallmentsAdapter(installmentList) { installment ->
+                                viewModel.installmentSelected = installment
+                            }
+                            installments_recycler.adapter = adapter
+                            hideLoading()
+                        } else {
+                            Toast.makeText(requireContext(), getString(R.string.no_data), Toast.LENGTH_LONG).show()
                         }
-                        installments_recycler.adapter = adapter
-                        hideLoading()
                     }
                 }
             }

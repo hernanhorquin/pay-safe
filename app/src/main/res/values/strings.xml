@@ -8,4 +8,7 @@
     <string name="amount_title">Seleccioná el monto</string>
     <string name="banks_title">Lista de Bancos</string>
     <string name="installments_title">Cuotas</string>
+    <string name="success_title">¡Finalizaste tu pago con éxito!</string>
+    <string name="finish">Terminar</string>
+    <string name="no_data">No se encontraron datos</string>
 </resources>

@@ -70,8 +70,9 @@ class PaymentMethodsFragment : Fragment() {
                 Status.SUCCESSFUL -> {
                     payment_methods_recycler.layoutManager = LinearLayoutManager(context)
                     it.data?.let { paymentMethodsList ->
-                        adapter = PaymentMethodsAdapter(paymentMethodsList) { paymentMethodId ->
-                            viewModel.paymentMethodId = paymentMethodId
+                        adapter = PaymentMethodsAdapter(paymentMethodsList) { paymentMethod ->
+                            viewModel.paymentMethodId = paymentMethod.id
+                            viewModel.paymentMethodName = paymentMethod.name
                         }
                         payment_methods_recycler.adapter = adapter
                         hideLoading()

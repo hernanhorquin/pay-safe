@@ -26,4 +26,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="ButtonText">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:layout_marginBottom">@dimen/button_margin_bottom</item>
+    </style>
+
 </resources>

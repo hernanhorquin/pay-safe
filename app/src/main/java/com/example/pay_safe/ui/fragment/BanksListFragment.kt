@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pay_safe.R
 import com.example.pay_safe.data.model.PaymentMethod
@@ -58,10 +59,15 @@ class BanksListFragment : Fragment() {
                     hideLoading()
                     banks_recycler.layoutManager = LinearLayoutManager(context)
                     it.data?.let { bankList ->
-                        adapter = PaymentMethodsAdapter(bankList) { bankId ->
-                            viewModel.bankId = bankId
+                        if (bankList.isNotEmpty()) {
+                            adapter = PaymentMethodsAdapter(bankList) { bank ->
+                                viewModel.bankId = bank.id
+                                viewModel.bankName = bank.name
+                            }
+                            banks_recycler.adapter = adapter
+                        } else {
+                            Toast.makeText(requireContext(), getString(R.string.no_data), Toast.LENGTH_LONG).show()
                         }
-                        banks_recycler.adapter = adapter
                     }
                 }
             }

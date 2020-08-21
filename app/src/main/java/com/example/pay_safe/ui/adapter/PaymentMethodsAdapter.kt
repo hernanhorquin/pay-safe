@@ -10,7 +10,7 @@ import com.example.pay_safe.data.model.PaymentMethod
 import com.example.pay_safe.ui.utils.loadImage
 import kotlinx.android.synthetic.main.item_payment_method.view.*
 
-class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>, val getId: (String) -> Unit): RecyclerView.Adapter<PaymentMethodsViewHolder>() {
+class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>, val getItem: (PaymentMethod) -> Unit): RecyclerView.Adapter<PaymentMethodsViewHolder>() {
 
     var selected = RecyclerView.NO_POSITION
 
@@ -47,7 +47,7 @@ class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>, val get
                         notifyItemChanged(before)
                     }
                 }
-                getId(item.id)
+                getItem(item)
             }
         }
     }
