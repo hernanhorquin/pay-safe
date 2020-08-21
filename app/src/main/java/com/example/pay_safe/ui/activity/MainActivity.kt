@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         viewPager.isUserInputEnabled = false
+        viewPager.offscreenPageLimit = 1
         viewPager.adapter = adapter
 
     }

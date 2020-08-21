@@ -12,7 +12,7 @@
         android:layout_marginTop="15dp"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:text="Lista de Bancos"
+        android:text="Installments"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

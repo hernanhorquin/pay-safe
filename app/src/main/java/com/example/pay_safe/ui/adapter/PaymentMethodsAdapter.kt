@@ -1,6 +1,5 @@
 package com.example.pay_safe.ui.adapter
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,7 @@ import com.example.pay_safe.data.model.PaymentMethod
 import com.example.pay_safe.ui.utils.loadImage
 import kotlinx.android.synthetic.main.item_payment_method.view.*
 
-class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>): RecyclerView.Adapter<PaymentMethodsViewHolder>() {
+class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>, val getId: (String) -> Unit): RecyclerView.Adapter<PaymentMethodsViewHolder>() {
 
     var selected = RecyclerView.NO_POSITION
 
@@ -27,8 +26,8 @@ class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>): Recycl
     override fun getItemCount(): Int = paymentMethodsList.size
 
     override fun onBindViewHolder(holder: PaymentMethodsViewHolder, position: Int) {
-        paymentMethodsList.get(position).let {
-            holder.bind(it)
+        paymentMethodsList.get(position).let { item ->
+            holder.bind(item)
             if (selected == position) {
                 holder.itemView.card.setCardBackgroundColor(Color.GRAY)
                 holder.itemView.name_payment_method.setTextColor(Color.WHITE)
@@ -48,6 +47,7 @@ class PaymentMethodsAdapter(val paymentMethodsList: List<PaymentMethod>): Recycl
                         notifyItemChanged(before)
                     }
                 }
+                getId(item.id)
             }
         }
     }

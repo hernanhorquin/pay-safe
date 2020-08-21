@@ -5,4 +5,5 @@
     <string name="amount_error_msg">Agregá un monto antes de avanzar</string>
     <string name="select_payment_method_error_msg">Seleccioná un método de pago antes de avanzar</string>
     <string name="amount_title">Seleccioná el monto</string>
+    <string name="banks_title">Lista de Bancos</string>
 </resources>

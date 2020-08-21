@@ -5,11 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pay_safe.ui.activity.MainActivity
 import com.example.pay_safe.R
+import com.example.pay_safe.data.model.PaymentMethod
+import com.example.pay_safe.ui.adapter.PaymentMethodsAdapter
+import com.example.pay_safe.ui.utils.Data
+import com.example.pay_safe.ui.utils.Status
+import com.example.pay_safe.ui.viewmodel.PaySafeViewModel
+import kotlinx.android.synthetic.main.fragment_banks_list.banks_recycler
 import kotlinx.android.synthetic.main.fragment_banks_list.button_continue
+import kotlinx.android.synthetic.main.fragment_banks_list.progressBar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BanksListFragment : Fragment() {
+
+    private val viewModel by sharedViewModel<PaySafeViewModel>()
+    private var adapter: PaymentMethodsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,9 +34,45 @@ class BanksListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpObservers()
+
+    }
+
+    private fun setUpObservers() {
+        viewModel.banksList.observe(::getLifecycle, ::updateUI)
+
         button_continue.setOnClickListener {
             (activity as (MainActivity)).moveNext()
         }
+    }
+
+    private fun updateUI(banksList: Data<List<PaymentMethod>>) {
+        when (banksList.responseType) {
+            Status.ERROR -> {
+                hideLoading()
+            }
+            Status.LOADING -> {
+                showLoading()
+            }
+            Status.SUCCESSFUL -> {
+                hideLoading()
+                banks_recycler.layoutManager = LinearLayoutManager(context)
+                banksList.data?.let {
+                    adapter = PaymentMethodsAdapter(it) { bankId ->
+                        viewModel.bankId = bankId
+                    }
+                    banks_recycler.adapter = adapter
+                }
+            }
+        }
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
+    }
+
+    private fun showLoading() {
+        progressBar.visibility = View.VISIBLE
     }
 
     companion object {

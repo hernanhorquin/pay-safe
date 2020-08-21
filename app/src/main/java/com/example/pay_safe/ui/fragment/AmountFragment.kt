@@ -11,12 +11,17 @@ import android.widget.Toast
 import com.example.pay_safe.ui.activity.MainActivity
 import com.example.pay_safe.R
 import com.example.pay_safe.ui.utils.closeSoftKeyBoard
+import com.example.pay_safe.ui.viewmodel.PaySafeViewModel
 import kotlinx.android.synthetic.main.fragment_amount.button_continue
 import kotlinx.android.synthetic.main.fragment_amount.edit_text_amount
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 import java.util.Locale
 
 class AmountFragment : Fragment() {
+
+    private val viewModel by sharedViewModel<PaySafeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +39,7 @@ class AmountFragment : Fragment() {
         button_continue.setOnClickListener {
             if (edit_text_amount.text.isNotEmpty()) {
                 closeSoftKeyBoard()
+                viewModel.amount = edit_text_amount.text.toString().replace("$", "").toInt()
                 (activity as (MainActivity)).moveNext()
             } else {
                 Toast.makeText(requireContext(), getString(R.string.amount_error_msg), Toast.LENGTH_SHORT).show()

@@ -18,11 +18,12 @@ import com.example.pay_safe.ui.viewmodel.PaySafeViewModel
 import kotlinx.android.synthetic.main.fragment_payment_methods.button_continue
 import kotlinx.android.synthetic.main.fragment_payment_methods.payment_methods_recycler
 import kotlinx.android.synthetic.main.fragment_payment_methods.progressBar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PaymentMethodsFragment : Fragment() {
 
-    private val viewModel by viewModel<PaySafeViewModel>()
+    private val viewModel by sharedViewModel<PaySafeViewModel>()
     private var adapter: PaymentMethodsAdapter? = null
 
     override fun onCreateView(
@@ -39,20 +40,22 @@ class PaymentMethodsFragment : Fragment() {
     }
 
     private fun setUpObservers() {
+        viewModel.paymentMethods.observe(::getLifecycle, ::updateUI)
+
         button_continue.setOnClickListener {
             adapter?.let {
                 if (it.selected != RecyclerView.NO_POSITION) {
                     (activity as (MainActivity)).moveNext()
+                    viewModel.getBanksList()
                 } else {
                     Toast.makeText(requireContext(), getString(R.string.select_payment_method_error_msg), Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        viewModel.paymentMethods.observe(::getLifecycle, ::updateUI)
     }
 
-    private fun updateUI(characterData: Data<List<PaymentMethod>>) {
-        when (characterData.responseType) {
+    private fun updateUI(paymentMethods: Data<List<PaymentMethod>>) {
+        when (paymentMethods.responseType) {
             Status.ERROR -> {
                 hideLoading()
             }
@@ -62,19 +65,21 @@ class PaymentMethodsFragment : Fragment() {
             Status.SUCCESSFUL -> {
                 hideLoading()
                 payment_methods_recycler.layoutManager = LinearLayoutManager(context)
-                characterData.data?.let {
-                    adapter = PaymentMethodsAdapter(it)
+                paymentMethods.data?.let {
+                    adapter = PaymentMethodsAdapter(it) { paymentMethodId ->
+                        viewModel.paymentMethodId = paymentMethodId
+                    }
                     payment_methods_recycler.adapter = adapter
                 }
             }
         }
     }
 
-    fun hideLoading() {
+    private fun hideLoading() {
         progressBar.visibility = View.GONE
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         progressBar.visibility = View.VISIBLE
     }
 
