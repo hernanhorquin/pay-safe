@@ -8,6 +8,7 @@ import com.example.pay_safe.data.model.PaymentMethod
 import com.example.pay_safe.data.repository.PaySafeRepository
 import com.example.pay_safe.ui.utils.Data
 import com.example.pay_safe.ui.utils.EMPTY_STRING
+import com.example.pay_safe.ui.utils.Event
 import com.example.pay_safe.ui.utils.Result
 import com.example.pay_safe.ui.utils.Status
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,41 @@ class PaySafeViewModel(private val repository: PaySafeRepository): ViewModel() {
     private var _banksList = MutableLiveData<Data<List<PaymentMethod>>>()
     val banksList: LiveData<Data<List<PaymentMethod>>>
         get() = _banksList
+
+    private val _moveTo = MutableLiveData<Event<Int>>()
+    val moveTo: LiveData<Event<Int>>
+        get() = _moveTo
+
+    private val _step = MutableLiveData<Int>()
+    val step: LiveData<Int>
+        get() = _step
+
+    private fun moveTo(step: Int) {
+        _step.postValue(step)
+        _moveTo.postValue(Event(step))
+    }
+
+    init {
+        moveTo(AMOUNT)
+    }
+
+    fun nextStep() {
+        when (step.value) {
+            AMOUNT -> moveTo(
+                PAYMENT_METHOD
+            )
+            PAYMENT_METHOD -> moveTo(
+                BANKS
+            )
+            BANKS -> moveTo(
+                INSTALLMENTS
+            )
+            INSTALLMENTS -> moveTo(
+                SUCCESS
+            )
+
+        }
+    }
 
 
     fun getPaymentMethods() = viewModelScope.launch {
@@ -49,5 +85,13 @@ class PaySafeViewModel(private val repository: PaySafeRepository): ViewModel() {
                 _banksList.postValue(Data(responseType = Status.SUCCESSFUL, data = result.data))
             }
         }
+    }
+
+    companion object Steps {
+        const val AMOUNT = 0
+        const val PAYMENT_METHOD = 1
+        const val BANKS = 2
+        const val INSTALLMENTS = 3
+        const val SUCCESS = 4
     }
 }

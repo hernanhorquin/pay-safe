@@ -20,8 +20,8 @@ class InstallmentsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         button_continue.setOnClickListener {
-            (activity as (MainActivity)).moveNext()
         }
     }
 

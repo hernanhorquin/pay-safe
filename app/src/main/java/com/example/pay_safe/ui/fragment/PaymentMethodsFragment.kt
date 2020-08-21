@@ -45,8 +45,7 @@ class PaymentMethodsFragment : Fragment() {
         button_continue.setOnClickListener {
             adapter?.let {
                 if (it.selected != RecyclerView.NO_POSITION) {
-                    (activity as (MainActivity)).moveNext()
-                    viewModel.getBanksList()
+                    viewModel.nextStep()
                 } else {
                     Toast.makeText(requireContext(), getString(R.string.select_payment_method_error_msg), Toast.LENGTH_SHORT).show()
                 }
