@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.pay_safe.R
+import com.example.pay_safe.ui.activity.MainActivity
 import com.example.pay_safe.ui.viewmodel.PaySafeViewModel
 import kotlinx.android.synthetic.main.fragment_success.button_finish
 import kotlinx.android.synthetic.main.fragment_success.text_amount
@@ -42,6 +43,11 @@ class SuccessFragment : Fragment() {
         text_payment_method.text = viewModel.paymentMethodName
         text_bank.text = viewModel.bankName
         text_installment.text = viewModel.installmentSelected
+    }
+
+    override fun onStop() {
+        (activity as MainActivity).supportActionBar?.show()
+        super.onStop()
     }
 
 }
